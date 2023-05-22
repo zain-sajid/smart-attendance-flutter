@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "111825259893",
+    "project_id": "smart-attendance-c8ff0",
+    "storage_bucket": "smart-attendance-c8ff0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111825259893:android:20c6c16cadb4e7f2b2173c",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111825259893-kms6ti6h74fo7fjo2et7bd007au1t01u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2rGja4xI27g3a8vMrwFo6BglizfzW2Dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111825259893-kms6ti6h74fo7fjo2et7bd007au1t01u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "111825259893-p3q4i8vtqpcgdga8ducditj0j9hbaoas.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterApplication1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
