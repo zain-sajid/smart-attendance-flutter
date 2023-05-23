@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:intl/intl.dart';
@@ -68,21 +70,25 @@ class TutorScreen extends StatelessWidget {
         title: Text('Teacher Screen'),
       ),
       body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text('Welcome, Teacher!'),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/qr');
-          },
-          child: Text('Generate QR Code'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            fetchAttendance();
-          },
-          child: Text('Generate QR Code'),
-        )
-      ])),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Welcome, Teacher!'),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/qr');
+            },
+            child: Text('Generate QR Code'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // fetchAttendance();
+            },
+            child: Text("Todays Attendance"),
+          ),
+          StudentListWidget()
+        ],
+      )),
     );
   }
 }
@@ -214,21 +220,69 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   }
 }
 
-Future<void> fetchAttendance() async {
-  try {
-    // Get the current date
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+class Student {
+  final String name;
 
-    // Fetch the attendance collection for the current date
-    final doc = await FirebaseFirestore.instance
-        .collection('attendance')
-        .doc(formattedDate)
-        .get();
+  Student({required this.name});
 
-    final data = doc.data() as Map<String, dynamic>;
-    print(data);
-  } catch (e) {
-    print('Error fetching attendance: $e');
+  factory Student.fromJson(String json) {
+    return Student(
+      name: json,
+    );
+  }
+}
+
+class StudentListWidget extends StatefulWidget {
+  @override
+  _StudentListWidgetState createState() => _StudentListWidgetState();
+}
+
+class _StudentListWidgetState extends State<StudentListWidget> {
+  late List<Student> students = [];
+
+  Future<void> fetchAttendance() async {
+    try {
+      // Get the current date
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+
+      // Fetch the attendance collection for the current date
+      final doc = await FirebaseFirestore.instance
+          .collection('attendance')
+          .doc(formattedDate)
+          .get();
+
+      final data = doc.data() as Map<String, dynamic>;
+
+      print(data['students']);
+
+      setState(() {
+        students = List<Student>.from(
+            data['students'].map((x) => Student.fromJson(x)));
+      });
+    } catch (e) {
+      print('Error fetching attendance: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAttendance();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      child: ListView.builder(
+        itemCount: students.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(students[index].name),
+          );
+        },
+      ),
+    );
   }
 }
